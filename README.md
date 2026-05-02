@@ -16,8 +16,10 @@ directly in the HTML inside `self.__next_f.push(...)` payloads. This scraper:
 
 - `scrape_wuwa_timeline.py`: main scraper
 - `output/latest.json`: canonical combined output for downstream use
-- `output/latest_all_all.json`: most recent unfiltered run with both record types
-- `output/latest_active_only_all.json`: most recent active-only run with both record types
+- `output/latest_all.json`: most recent unfiltered run with both record types
+- `output/latest_active_only.json`: most recent active-only run with both record types
+- `output/latest_banners.json`: most recent banners-only run
+- `output/latest_activities.json`: most recent activities-only run
 - `output/banners.csv`: flattened banner rows
 - `output/activities.csv`: flattened activity rows
 - `output/provenance.json`: extraction metadata and caveats
@@ -56,11 +58,20 @@ python3 scrape_wuwa_timeline.py
 
 Future agents should prefer:
 
-- `output/latest_active_only_all.json` for clean "what still matters" tracking
-- `output/latest_all_all.json` for the complete source snapshot
+- `output/latest_active_only.json` for clean "what still matters" tracking
+- `output/latest_all.json` for the complete source snapshot
 
 `output/latest.json` is still written and always points to the most recent run,
 regardless of mode.
+
+Mode-specific snapshots follow this naming rule:
+
+- `latest_all.json`: full unfiltered run
+- `latest_active_only.json`: full active-only run
+- `latest_banners.json`: banners-only run
+- `latest_activities.json`: activities-only run
+- `latest_active_only_banners.json`: active-only banners-only run
+- `latest_active_only_activities.json`: active-only activities-only run
 
 Top-level shape:
 

@@ -372,9 +372,20 @@ def write_summary(
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def build_mode_suffix(active_only: bool, include: str) -> str:
+    parts: list[str] = []
+    if active_only:
+        parts.append("active_only")
+    if include != "all":
+        parts.append(include)
+    return "_".join(parts) if parts else "all"
+
+
 def write_run_outputs(output_dir: Path, payload: dict[str, Any], banners: list[dict[str, Any]], activities: list[dict[str, Any]]) -> None:
-    parts = ["active_only" if payload["filters"]["active_only"] else "all", payload["filters"]["include"]]
-    suffix = "_".join(parts)
+    suffix = build_mode_suffix(
+        active_only=payload["filters"]["active_only"],
+        include=payload["filters"]["include"],
+    )
 
     write_json(output_dir / "latest.json", payload)
     write_json(output_dir / f"latest_{suffix}.json", payload)
