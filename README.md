@@ -16,8 +16,8 @@ directly in the HTML inside `self.__next_f.push(...)` payloads. This scraper:
 
 - `scrape_wuwa_timeline.py`: main scraper
 - `output/latest.json`: canonical combined output for downstream use
-- `output/latest_all.json`: most recent unfiltered run
-- `output/latest_active_only.json`: most recent filtered run
+- `output/latest_all_all.json`: most recent unfiltered run with both record types
+- `output/latest_active_only_all.json`: most recent active-only run with both record types
 - `output/banners.csv`: flattened banner rows
 - `output/activities.csv`: flattened activity rows
 - `output/provenance.json`: extraction metadata and caveats
@@ -26,7 +26,7 @@ directly in the HTML inside `self.__next_f.push(...)` payloads. This scraper:
 ## Usage
 
 ```bash
-cd /home/sagnik/Desktop/wuwa_timeline_scraper
+cd /home/sagnik/Projects/games/wuwa-timeline-scraper
 python3 scrape_wuwa_timeline.py
 ```
 
@@ -36,12 +36,28 @@ Exclude expired items for a cleaner tracking view:
 python3 scrape_wuwa_timeline.py --active-only
 ```
 
+Pick a server timezone, emit timestamps in a different timezone, and keep only banners:
+
+```bash
+python3 scrape_wuwa_timeline.py --server asia --timezone Asia/Kolkata --include banners
+```
+
+The same options can be supplied through environment variables:
+
+```bash
+export WUWA_TIMELINE_SERVER=america
+export WUWA_TIMELINE_TIMEZONE=America/Los_Angeles
+export WUWA_TIMELINE_INCLUDE=activities
+export WUWA_TIMELINE_ACTIVE_ONLY=true
+python3 scrape_wuwa_timeline.py
+```
+
 ## Output contract
 
 Future agents should prefer:
 
-- `output/latest_active_only.json` for clean "what still matters" tracking
-- `output/latest_all.json` for the complete source snapshot
+- `output/latest_active_only_all.json` for clean "what still matters" tracking
+- `output/latest_all_all.json` for the complete source snapshot
 
 `output/latest.json` is still written and always points to the most recent run,
 regardless of mode.
@@ -53,7 +69,12 @@ Top-level shape:
   "scraped_at_utc": "ISO-8601 timestamp",
   "source_url": "https://wuwatracker.com/timeline",
   "filters": {
-    "active_only": false
+    "active_only": false,
+    "server": "asia",
+    "server_label": "Asia, SEA, TW/HK/MO",
+    "server_timezone": "Asia/Shanghai",
+    "timezone": "UTC",
+    "include": "all"
   },
   "counts": {
     "banners": 0,
@@ -84,6 +105,10 @@ Normalized record shape:
   "group": "number | null",
   "start_date": "string",
   "end_date": "string",
+  "start_at_server": "ISO-8601 timestamp | null",
+  "end_at_server": "ISO-8601 timestamp | null",
+  "start_at_output_tz": "ISO-8601 timestamp | null",
+  "end_at_output_tz": "ISO-8601 timestamp | null",
   "end_at_utc": "ISO-8601 timestamp | null",
   "has_expired": false,
   "expires_in": "Xd Yh Zm | null",
@@ -98,8 +123,9 @@ Normalized record shape:
 - `cover_img_src` is an image path, not the metadata source.
 - The internal Next.js chunk id may change over time, so extraction is matched by
   payload content rather than a fixed numeric prefix.
-- `--active-only` keeps only records whose `end_date` is still in the future.
-- End dates are preserved in every output so you can sort by upcoming deadlines
-  and avoid missing expiring events.
+- `--server` controls how the tracker timestamps are interpreted before conversion.
+- `--timezone` controls the output/display timezone written into normalized records.
+- `--include` accepts `all`, `banners`, or `activities`.
+- `--active-only` keeps only records whose converted `end_at_utc` is still in the future.
 - If plain HTTP fetches stop working due to bot protection, the next fallback is a
   browser-backed fetch, but that is not currently required.

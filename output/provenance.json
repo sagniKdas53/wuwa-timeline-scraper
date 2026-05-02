@@ -1,10 +1,12 @@
 {
-  "fetched_at_utc": "2026-05-02T16:55:52.335884+00:00",
+  "fetched_at_utc": "2026-05-02T18:35:12.136406+00:00",
   "source_url": "https://wuwatracker.com/timeline",
   "extraction_method": "Parse embedded self.__next_f.push() Next.js flight payload from HTML",
   "notes": [
     "Data is embedded in server-rendered HTML, not obtained from a separate public metadata API during this scrape.",
     "The chunk id prefix before the JSON object may change; scraper matches on the presence of banners and activities.",
+    "Source event timestamps were interpreted using the Asia/Shanghai timezone for server 'asia'.",
+    "Output timestamps were emitted in both UTC and the requested timezone 'Asia/Kolkata'.",
     "If Cloudflare introduces stronger bot protection, a browser-backed fetch may be needed later."
   ]
 }
