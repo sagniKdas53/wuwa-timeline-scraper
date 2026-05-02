@@ -1,13 +1,13 @@
 {
-  "scraped_at_utc": "2026-05-02T16:55:35.776302+00:00",
+  "scraped_at_utc": "2026-05-02T16:55:52.335884+00:00",
   "source_url": "https://wuwatracker.com/timeline",
   "filters": {
-    "active_only": true
+    "active_only": false
   },
   "counts": {
     "banners": 12,
-    "activities": 23,
-    "total": 35
+    "activities": 24,
+    "total": 36
   },
   "unfiltered_counts": {
     "banners": 12,
@@ -644,6 +644,24 @@
       "has_expired": false,
       "expires_in": "43d 11h 4m",
       "is_cst_start": true,
+      "is_banner_event": false,
+      "banner_group": 1
+    },
+    {
+      "record_type": "activity",
+      "record_index": 1,
+      "name": "Endstate Matrix High Difficulty Recurring Challenge",
+      "description": "In Endstate Matrix, deploy Resonators and select a Power Circuit before starting a high-difficulty challenge. Endstate Matrix progresses through Challenge Cycles. Each Challenge Cycle spans across multiple Challenge Phases, which reset with version updates. Rewards are offered independently for Challenge Cycles and Challenge Phases.",
+      "cover_img_src": "/api/event-cover-images/file/endstate-matrix-high-difficulty-recurring-challenge.png",
+      "color": "#812831",
+      "source_url": "https://wutheringwaves.kurogames.com/en/main/news/detail/4418",
+      "group": 1,
+      "start_date": "2026-03-26 04:00",
+      "end_date": "2026-04-30 03:59:59",
+      "end_at_utc": "2026-04-30T03:59:59+00:00",
+      "has_expired": true,
+      "expires_in": "0d 0h 0m",
+      "is_cst_start": false,
       "is_banner_event": false,
       "banner_group": 1
     }

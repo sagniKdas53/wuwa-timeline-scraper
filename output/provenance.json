@@ -1,5 +1,5 @@
 {
-  "fetched_at_utc": "2026-05-02T16:55:35.776302+00:00",
+  "fetched_at_utc": "2026-05-02T16:55:52.335884+00:00",
   "source_url": "https://wuwatracker.com/timeline",
   "extraction_method": "Parse embedded self.__next_f.push() Next.js flight payload from HTML",
   "notes": [
