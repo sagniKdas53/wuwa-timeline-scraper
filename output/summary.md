@@ -1,11 +1,11 @@
 # WuWa Timeline Scrape Summary
 
-- Generated at UTC: 2026-04-29T07:31:26.268923+00:00
-- Banner count: 10
-- Activity count: 17
-- Total records: 27
-- Active banners: 6
-- Active activities: 4
+- Generated at UTC: 2026-05-02T16:55:35.789279+00:00
+- Banner count: 12
+- Activity count: 24
+- Total records: 36
+- Active banners: 12
+- Active activities: 23
 
 ## Current extraction notes
 
@@ -16,13 +16,13 @@
 
 ## Next items to expire
 
-- [banner] Between Light and Shadow - Zani Banner | ends 2026-04-29 11:59:59 UTC | time left 0d 4h 28m | https://wutheringwaves.kurogames.com/en/main/news/detail/4418
-- [banner] Blazing Justice - Zani Weapon Banner | ends 2026-04-29 11:59:59 UTC | time left 0d 4h 28m | https://wutheringwaves.kurogames.com/en/main/news/detail/4418
-- [banner] Luminous Hymn - Phoebe Weapon Banner | ends 2026-04-29 11:59:59 UTC | time left 0d 4h 28m | https://wutheringwaves.kurogames.com/en/main/news/detail/4418
-- [activity] Soar to the Beat Rhythm Challenge Event | ends 2026-04-29 11:59:59 UTC | time left 0d 4h 28m | https://wutheringwaves.kurogames.com/en/main/news/detail/4418
-- [banner] Spectrum Blaster - Lynae Weapon Banner | ends 2026-04-29 11:59:59 UTC | time left 0d 4h 28m | https://wutheringwaves.kurogames.com/en/main/news/detail/4418
-- [banner] Undefined Spectrum - Lynae Banner | ends 2026-04-29 11:59:59 UTC | time left 0d 4h 28m | https://wutheringwaves.kurogames.com/en/main/news/detail/4418
-- [banner] With Hushed Whispers - Phoebe Banner | ends 2026-04-29 11:59:59 UTC | time left 0d 4h 28m | https://wutheringwaves.kurogames.com/en/main/news/detail/4418
-- [activity] Endstate Matrix High Difficulty Recurring Challenge | ends 2026-04-30 03:59:59 UTC | time left 0d 20h 28m | https://wutheringwaves.kurogames.com/en/main/news/detail/4418
-- [activity] Fantasies of the Thousand Gateways | ends 2026-05-04 03:59 UTC | time left 4d 20h 27m | https://wutheringwaves.kurogames.com/en/main/news/detail/3088
-- [activity] Whimpering Wastes | ends 2026-05-11 03:59:59 UTC | time left 11d 20h 28m | https://wutheringwaves.kurogames.com/en/main/news/detail/2094
+- [activity] Fantasies of the Thousand Gateways | ends 2026-05-04 03:59 UTC | time left 1d 11h 3m | https://wutheringwaves.kurogames.com/en/main/news/detail/3088
+- [activity] Fantasies of the Thousand Gateways | ends 2026-05-11 03:59 UTC | time left 8d 11h 3m | https://wutheringwaves.kurogames.com/en/main/news/detail/3088
+- [activity] Whimpering Wastes | ends 2026-05-11 03:59:59 UTC | time left 8d 11h 4m | https://wutheringwaves.kurogames.com/en/main/news/detail/2094
+- [activity] [Bountiful Crescendo] Limited-Time Material Double Drop Event | ends 2026-05-21 03:59 UTC | time left 18d 11h 3m | https://wutheringwaves.kurogames.com/en/main/news/detail/4418
+- [activity] Aced! Combat Mastery Test! | ends 2026-05-21 03:59:59 UTC | time left 18d 11h 4m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
+- [banner] Across Time's Waxes and Wanes - Iuno Banner | ends 2026-05-21 09:59:59 UTC | time left 18d 17h 4m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
+- [activity] Crossworld Sync: Pt. 1 | ends 2026-05-21 09:59:59 UTC | time left 18d 17h 4m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
+- [banner] Distant May the Starlights Be - Mornye Banner | ends 2026-05-21 09:59:59 UTC | time left 18d 17h 4m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
+- [banner] Frostburn - Hiyuki Weapon Banner | ends 2026-05-21 09:59:59 UTC | time left 18d 17h 4m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
+- [banner] Moongazer's Sigil - Iuno Weapon Banner | ends 2026-05-21 09:59:59 UTC | time left 18d 17h 4m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
