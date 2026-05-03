@@ -59,6 +59,8 @@ SERVER_LABELS = {
 
 @dataclass
 class Provenance:
+    """Metadata describing when and how the timeline snapshot was produced."""
+
     fetched_at_utc: str
     source_url: str
     extraction_method: str
@@ -66,6 +68,8 @@ class Provenance:
 
 
 def fetch_html(url: str) -> str:
+    """Fetch raw HTML from the tracker page."""
+
     request = Request(url, headers={"User-Agent": USER_AGENT})
     with urlopen(request, timeout=30) as response:
         charset = response.headers.get_content_charset() or "utf-8"
@@ -73,16 +77,22 @@ def fetch_html(url: str) -> str:
 
 
 def extract_push_payloads(html: str) -> list[str]:
+    """Extract raw Next.js flight payload strings from the HTML response."""
+
     return re.findall(r'self\.__next_f\.push\(\[1,"(.*?)"\]\)</script>', html, flags=re.S)
 
 
 def decode_flight_string(value: str) -> str:
+    """Decode a JS-escaped flight payload string embedded in HTML."""
+
     # The payload is JS-string escaped inside HTML.
     decoded = bytes(unescape(value), "utf-8").decode("unicode_escape")
     return decoded
 
 
 def extract_timeline_data(html: str) -> dict[str, Any]:
+    """Extract the timeline JSON object from the embedded Next.js payload."""
+
     push_payloads = extract_push_payloads(html)
     if not push_payloads:
         raise RuntimeError("No Next.js flight payloads were found in the HTML")
@@ -102,10 +112,14 @@ def extract_timeline_data(html: str) -> dict[str, Any]:
 
 
 def env_value(name: str, default: str | None = None) -> str | None:
+    """Read a namespaced environment variable."""
+
     return os.getenv(f"{ENV_PREFIX}{name}", default)
 
 
 def parse_bool_env(name: str, default: bool = False) -> bool:
+    """Parse a boolean environment variable using common truthy/falsey values."""
+
     raw = env_value(name)
     if raw is None:
         return default
@@ -118,6 +132,8 @@ def parse_bool_env(name: str, default: bool = False) -> bool:
 
 
 def canonicalize_server(value: str) -> str:
+    """Normalize server aliases into one supported canonical server name."""
+
     normalized = value.strip().lower().replace("-", "_").replace("/", "_")
     aliases = {
         "as": "asia",
@@ -141,6 +157,8 @@ def canonicalize_server(value: str) -> str:
 
 
 def parse_include(value: str) -> str:
+    """Normalize the include selector into one supported mode."""
+
     normalized = value.strip().lower().replace("-", "_")
     aliases = {
         "banner": "banners",
@@ -154,6 +172,8 @@ def parse_include(value: str) -> str:
 
 
 def load_timezone(value: str) -> ZoneInfo:
+    """Load an IANA timezone or raise a configuration error."""
+
     try:
         return ZoneInfo(value)
     except ZoneInfoNotFoundError as exc:
@@ -161,6 +181,8 @@ def load_timezone(value: str) -> ZoneInfo:
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse CLI arguments and environment-backed defaults."""
+
     env_server = env_value("SERVER", DEFAULT_SERVER) or DEFAULT_SERVER
     env_timezone = env_value("TIMEZONE", DEFAULT_OUTPUT_TIMEZONE) or DEFAULT_OUTPUT_TIMEZONE
     env_include = env_value("INCLUDE", DEFAULT_INCLUDE) or DEFAULT_INCLUDE
@@ -202,6 +224,8 @@ def parse_args() -> argparse.Namespace:
 
 
 def parse_event_datetime(value: str | None, source_tz: ZoneInfo) -> datetime | None:
+    """Parse a tracker datetime string in the selected source timezone."""
+
     if not value:
         return None
 
@@ -214,6 +238,8 @@ def parse_event_datetime(value: str | None, source_tz: ZoneInfo) -> datetime | N
 
 
 def format_duration(delta_seconds: float) -> str:
+    """Format a duration in seconds as a compact day/hour/minute string."""
+
     remaining = max(int(delta_seconds), 0)
     days, rem = divmod(remaining, 86400)
     hours, rem = divmod(rem, 3600)
@@ -227,6 +253,8 @@ def normalize_records(
     source_tz: ZoneInfo,
     output_tz: ZoneInfo,
 ) -> list[dict[str, Any]]:
+    """Normalize raw banner or activity records into the output schema."""
+
     normalized: list[dict[str, Any]] = []
     now_utc = datetime.now(timezone.utc)
     for index, record in enumerate(records, start=1):
@@ -235,10 +263,21 @@ def normalize_records(
         start_date = record.get("startDate")
         start_at_source = parse_event_datetime(start_date, source_tz)
         end_at_source = parse_event_datetime(end_date, source_tz)
-        start_at_utc = start_at_source.astimezone(timezone.utc) if start_at_source is not None else None
-        end_at_utc = end_at_source.astimezone(timezone.utc) if end_at_source is not None else None
-        start_at_output = start_at_source.astimezone(output_tz) if start_at_source is not None else None
-        end_at_output = end_at_source.astimezone(output_tz) if end_at_source is not None else None
+        end_at_utc = (
+            end_at_source.astimezone(timezone.utc)
+            if end_at_source is not None
+            else None
+        )
+        start_at_output = (
+            start_at_source.astimezone(output_tz)
+            if start_at_source is not None
+            else None
+        )
+        end_at_output = (
+            end_at_source.astimezone(output_tz)
+            if end_at_source is not None
+            else None
+        )
         expires_in = None
         has_expired = None
         sort_end_at = None
@@ -253,17 +292,37 @@ def normalize_records(
                 "record_type": record_type,
                 "record_index": index,
                 "name": record.get("name"),
-                "description": None if record.get("description") in ("", "$undefined") else record.get("description"),
+                "description": (
+                    None
+                    if record.get("description") in ("", "$undefined")
+                    else record.get("description")
+                ),
                 "cover_img_src": record.get("coverImgSrc"),
                 "color": record.get("color"),
                 "source_url": record.get("sourceUrl"),
                 "group": record.get("group"),
                 "start_date": start_date,
                 "end_date": end_date,
-                "start_at_server": start_at_source.isoformat() if start_at_source is not None else None,
-                "end_at_server": end_at_source.isoformat() if end_at_source is not None else None,
-                "start_at_output_tz": start_at_output.isoformat() if start_at_output is not None else None,
-                "end_at_output_tz": end_at_output.isoformat() if end_at_output is not None else None,
+                "start_at_server": (
+                    start_at_source.isoformat()
+                    if start_at_source is not None
+                    else None
+                ),
+                "end_at_server": (
+                    end_at_source.isoformat()
+                    if end_at_source is not None
+                    else None
+                ),
+                "start_at_output_tz": (
+                    start_at_output.isoformat()
+                    if start_at_output is not None
+                    else None
+                ),
+                "end_at_output_tz": (
+                    end_at_output.isoformat()
+                    if end_at_output is not None
+                    else None
+                ),
                 "end_at_utc": sort_end_at,
                 "has_expired": has_expired,
                 "expires_in": expires_in,
@@ -276,12 +335,16 @@ def normalize_records(
 
 
 def filter_records(rows: list[dict[str, Any]], active_only: bool) -> list[dict[str, Any]]:
+    """Optionally drop expired rows from the output list."""
+
     if not active_only:
         return rows
     return [row for row in rows if row.get("has_expired") is not True]
 
 
 def sort_records(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Sort rows by expiry status, then end time, then name."""
+
     def sort_key(row: dict[str, Any]) -> tuple[int, str, str]:
         end_at = row.get("end_at_utc") or "9999-12-31T23:59:59+00:00"
         return (1 if row.get("has_expired") else 0, end_at, row.get("name") or "")
@@ -290,10 +353,14 @@ def sort_records(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def write_json(path: Path, payload: Any) -> None:
+    """Write a JSON payload with stable indentation and ASCII escaping."""
+
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
 
 
 def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
+    """Write flattened timeline rows to CSV."""
+
     fieldnames = [
         "record_type",
         "record_index",
@@ -328,6 +395,8 @@ def write_summary(
     all_banners: list[dict[str, Any]],
     all_activities: list[dict[str, Any]],
 ) -> None:
+    """Write a human-readable summary preview of the current snapshot."""
+
     include = payload["filters"]["include"]
     server_name = payload["filters"]["server"]
     output_timezone = payload["filters"]["timezone"]
@@ -337,7 +406,10 @@ def write_summary(
         "# WuWa Timeline Scrape Summary",
         "",
         f"- Generated at UTC: {datetime.now(timezone.utc).isoformat()}",
-        f"- Server: {SERVER_LABELS.get(server_name, server_name)} ({SERVER_TIMEZONES[server_name]})",
+        (
+            f"- Server: {SERVER_LABELS.get(server_name, server_name)} "
+            f"({SERVER_TIMEZONES[server_name]})"
+        ),
         f"- Output timezone: {output_timezone}",
         f"- Include mode: {include}",
         f"- Banner count: {len(all_banners)}",
@@ -351,7 +423,11 @@ def write_summary(
         "- Source page embeds timeline data directly into a Next.js flight payload.",
         "- No separate public JSON metadata endpoint was required for this scrape.",
         "- `cover_img_src` points to image routes and is not the source of the event metadata.",
-        "- Event timestamps are interpreted in the selected server timezone and also emitted in UTC plus the requested output timezone.",
+        (
+            "- Event timestamps are interpreted in the selected server "
+            "timezone and also emitted in UTC plus the requested output "
+            "timezone."
+        ),
         "",
         "## Next items to expire",
         "",
@@ -366,13 +442,19 @@ def write_summary(
     preview = sort_records(preview_source)[:10]
     for row in preview:
         lines.append(
-            f"- [{row['record_type']}] {row['name']} | ends {row['end_at_output_tz']} | time left {row['expires_in']} | {row['source_url']}"
+            (
+                f"- [{row['record_type']}] {row['name']} | ends "
+                f"{row['end_at_output_tz']} | time left "
+                f"{row['expires_in']} | {row['source_url']}"
+            )
         )
 
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def build_mode_suffix(active_only: bool, include: str) -> str:
+    """Build the file suffix used for mode-specific output artifacts."""
+
     parts: list[str] = []
     if active_only:
         parts.append("active_only")
@@ -381,7 +463,14 @@ def build_mode_suffix(active_only: bool, include: str) -> str:
     return "_".join(parts) if parts else "all"
 
 
-def write_run_outputs(output_dir: Path, payload: dict[str, Any], banners: list[dict[str, Any]], activities: list[dict[str, Any]]) -> None:
+def write_run_outputs(
+    output_dir: Path,
+    payload: dict[str, Any],
+    banners: list[dict[str, Any]],
+    activities: list[dict[str, Any]],
+) -> None:
+    """Write JSON and CSV artifacts for the selected output mode."""
+
     suffix = build_mode_suffix(
         active_only=payload["filters"]["active_only"],
         include=payload["filters"]["include"],
@@ -398,6 +487,8 @@ def write_run_outputs(output_dir: Path, payload: dict[str, Any], banners: list[d
 
 
 def main() -> int:
+    """Run the scraper and emit normalized WuWa timeline artifacts."""
+
     try:
         args = parse_args()
         server = canonicalize_server(args.server)
@@ -418,12 +509,21 @@ def main() -> int:
     except (HTTPError, URLError) as exc:
         print(f"Network error: {exc}", file=sys.stderr)
         return 2
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         print(f"Extraction error: {exc}", file=sys.stderr)
         return 1
 
-    all_banners = sort_records(normalize_records(raw_data.get("banners", []), "banner", source_tz, output_tz))
-    all_activities = sort_records(normalize_records(raw_data.get("activities", []), "activity", source_tz, output_tz))
+    all_banners = sort_records(
+        normalize_records(raw_data.get("banners", []), "banner", source_tz, output_tz)
+    )
+    all_activities = sort_records(
+        normalize_records(
+            raw_data.get("activities", []),
+            "activity",
+            source_tz,
+            output_tz,
+        )
+    )
     banners = filter_records(all_banners, args.active_only)
     activities = filter_records(all_activities, args.active_only)
     selected_banners = banners if include in {"all", "banners"} else []
@@ -456,13 +556,31 @@ def main() -> int:
     provenance = Provenance(
         fetched_at_utc=payload["scraped_at_utc"],
         source_url=TIMELINE_URL,
-        extraction_method="Parse embedded self.__next_f.push() Next.js flight payload from HTML",
+        extraction_method=(
+            "Parse embedded self.__next_f.push() Next.js flight payload "
+            "from HTML"
+        ),
         notes=[
-            "Data is embedded in server-rendered HTML, not obtained from a separate public metadata API during this scrape.",
-            "The chunk id prefix before the JSON object may change; scraper matches on the presence of banners and activities.",
-            f"Source event timestamps were interpreted using the {SERVER_TIMEZONES[server]} timezone for server '{server}'.",
-            f"Output timestamps were emitted in both UTC and the requested timezone '{args.timezone}'.",
-            "If Cloudflare introduces stronger bot protection, a browser-backed fetch may be needed later.",
+            (
+                "Data is embedded in server-rendered HTML, not obtained from "
+                "a separate public metadata API during this scrape."
+            ),
+            (
+                "The chunk id prefix before the JSON object may change; "
+                "scraper matches on the presence of banners and activities."
+            ),
+            (
+                "Source event timestamps were interpreted using the "
+                f"{SERVER_TIMEZONES[server]} timezone for server '{server}'."
+            ),
+            (
+                "Output timestamps were emitted in both UTC and the requested "
+                f"timezone '{args.timezone}'."
+            ),
+            (
+                "If Cloudflare introduces stronger bot protection, a "
+                "browser-backed fetch may be needed later."
+            ),
         ],
     )
 
