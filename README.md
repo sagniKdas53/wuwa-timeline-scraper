@@ -15,6 +15,7 @@ directly in the HTML inside `self.__next_f.push(...)` payloads. This scraper:
 ## Files
 
 - `scrape_wuwa_timeline.py`: main scraper
+- `HERMES_CRON.md`: paste-ready Hermes cron prompt for the WuWa reminder job
 - `output/latest.json`: canonical combined output for downstream use
 - `output/latest_all.json`: most recent unfiltered run with both record types
 - `output/latest_active_only.json`: most recent active-only run with both record types
