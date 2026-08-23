@@ -130,6 +130,23 @@ Normalized record shape:
 }
 ```
 
+## Testing
+
+The scraper's parsing/normalization logic is covered by an offline test suite
+that never touches the network. It builds a synthetic HTML payload shaped
+like the real `self.__next_f.push(...)` response and runs it through the
+same extraction, normalization, filtering, and output-writing code the live
+scraper uses.
+
+```bash
+pip install -r requirements-dev.txt
+pytest tests/ -v
+```
+
+This catches regressions in the parsing/normalization logic, but it cannot
+detect if wuwatracker.com changes its page markup or JSON shape — that
+still requires an occasional live run against the real site.
+
 ## Notes
 
 - `cover_img_src` is an image path, not the metadata source.
