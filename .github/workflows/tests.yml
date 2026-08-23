@@ -1,11 +1,11 @@
-name: Pylint
+name: Tests
 
 on:
   push:
   pull_request:
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pylint -r requirements-dev.txt
-      - name: Analyse Python files with pylint
+          pip install -r requirements-dev.txt
+      - name: Run tests
         run: |
-          pylint $(git ls-files '*.py')
+          pytest tests/ -v
