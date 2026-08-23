@@ -250,3 +250,60 @@ def test_main_returns_config_error_code_on_bad_server(
     monkeypatch.setattr("sys.argv", ["scrape_wuwa_timeline.py", "--server", "mars"])
 
     assert module.main() == 2
+
+
+# --- real-page regression fixture ---------------------------------------
+#
+# Unlike the synthetic-payload tests above, these run against an actual
+# trimmed capture of wuwatracker.com/timeline (see fixtures/README.md).
+# They catch cases the synthetic payload can't: the real page has many
+# unrelated __next_f.push chunks to skip over, including one that also
+# contains the literal substring "banners" without being the data payload.
+
+
+def test_extract_timeline_data_against_real_snapshot(
+    scraper_module: ModuleType, real_timeline_html: str
+):
+    data = scraper_module.extract_timeline_data(real_timeline_html)
+    assert len(data["banners"]) == 10
+    assert len(data["activities"]) == 14
+    assert all(isinstance(b.get("name"), str) and b["name"] for b in data["banners"])
+    assert all(isinstance(a.get("name"), str) and a["name"] for a in data["activities"])
+
+
+def test_normalize_records_handles_real_snapshot_without_error(
+    scraper_module: ModuleType, real_timeline_html: str
+):
+    data = scraper_module.extract_timeline_data(real_timeline_html)
+    source_tz = ZoneInfo("Asia/Shanghai")
+    output_tz = ZoneInfo("Asia/Kolkata")
+
+    banners = scraper_module.normalize_records(data["banners"], "banner", source_tz, output_tz)
+    activities = scraper_module.normalize_records(
+        data["activities"], "activity", source_tz, output_tz
+    )
+
+    assert len(banners) == 10
+    assert len(activities) == 14
+    for row in banners + activities:
+        # Every record in the real snapshot has both dates set, so these
+        # derived fields should never be None here.
+        assert row["start_at_server"] is not None
+        assert row["end_at_utc"] is not None
+        assert row["has_expired"] in (True, False)
+
+
+def test_main_against_real_snapshot(
+    isolated_scraper_module: ModuleType,
+    real_timeline_html: str,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    module = isolated_scraper_module
+    monkeypatch.setattr(module, "fetch_html", lambda url: real_timeline_html)
+    monkeypatch.setattr("sys.argv", ["scrape_wuwa_timeline.py"])
+
+    assert module.main() == 0
+
+    output_dir = Path(module.__file__).resolve().parent / "output"
+    latest = json.loads((output_dir / "latest.json").read_text(encoding="utf-8"))
+    assert latest["unfiltered_counts"] == {"banners": 10, "activities": 14, "total": 24}

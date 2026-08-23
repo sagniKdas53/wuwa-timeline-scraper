@@ -81,6 +81,14 @@ def sample_html(sample_payload: dict) -> str:
 
 
 @pytest.fixture
+def real_timeline_html() -> str:
+    """A trimmed real capture of wuwatracker.com/timeline. See fixtures/README.md."""
+
+    path = Path(__file__).resolve().parent / "fixtures" / "real_timeline_snapshot.html"
+    return path.read_text(encoding="utf-8")
+
+
+@pytest.fixture
 def scraper_module() -> ModuleType:
     """Import the real scraper module directly for unit-level function tests."""
 
