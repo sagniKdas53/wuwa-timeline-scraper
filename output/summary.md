@@ -1,14 +1,14 @@
 # WuWa Timeline Scrape Summary
 
-- Generated at UTC: 2026-05-02T18:35:12.140885+00:00
+- Generated at UTC: 2026-09-04T07:14:53.686040+00:00
 - Server: Asia, SEA, TW/HK/MO (Asia/Shanghai)
-- Output timezone: Asia/Kolkata
-- Include mode: banners
-- Banner count: 12
-- Activity count: 24
-- Total records: 36
-- Active banners: 12
-- Active activities: 23
+- Output timezone: UTC
+- Include mode: all
+- Banner count: 10
+- Activity count: 15
+- Total records: 25
+- Active banners: 10
+- Active activities: 14
 
 ## Current extraction notes
 
@@ -19,13 +19,13 @@
 
 ## Next items to expire
 
-- [banner] Across Time's Waxes and Wanes - Iuno Banner | ends 2026-05-21T07:29:59+05:30 | time left 18d 7h 24m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
-- [banner] Distant May the Starlights Be - Mornye Banner | ends 2026-05-21T07:29:59+05:30 | time left 18d 7h 24m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
-- [banner] Frostburn - Hiyuki Weapon Banner | ends 2026-05-21T07:29:59+05:30 | time left 18d 7h 24m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
-- [banner] Moongazer's Sigil - Iuno Weapon Banner | ends 2026-05-21T07:29:59+05:30 | time left 18d 7h 24m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
-- [banner] Starfield Calibrator - Mornye Weapon Banner | ends 2026-05-21T07:29:59+05:30 | time left 18d 7h 24m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
-- [banner] Thousand Futures Mirrored in Snow - Hiyuki Banner | ends 2026-05-21T07:29:59+05:30 | time left 18d 7h 24m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
-- [banner] False Promise for Tomorrow - Denia Banner | ends 2026-06-07T09:29:59+05:30 | time left 35d 9h 24m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
-- [banner] Forged Dwarf Star - Denia Weapon Banner | ends 2026-06-07T09:29:59+05:30 | time left 35d 9h 24m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
-- [banner] Horizon of Dawnbreak - Chisa Banner | ends 2026-06-07T09:29:59+05:30 | time left 35d 9h 24m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
-- [banner] Kumokiri - Chisa Weapon Banner | ends 2026-06-07T09:29:59+05:30 | time left 35d 9h 24m | https://wutheringwaves.kurogames.com/en/main/news/detail/4605
+- [activity] [Bountiful Crescendo] Limited-Time Material Double Drop Event | ends 2026-09-09T19:59:00+00:00 | time left 5d 12h 44m | https://wutheringwaves.kurogames.com/en/main/news/detail/5023
+- [banner] False Promise for Tomorrow - Denia Banner | ends 2026-09-10T01:59:59+00:00 | time left 5d 18h 45m | https://wutheringwaves.kurogames.com/en/main/news/detail/5310
+- [banner] Forged Dwarfstar - Denia Weapon Banner | ends 2026-09-10T01:59:59+00:00 | time left 5d 18h 45m | https://wutheringwaves.kurogames.com/en/main/news/detail/5310
+- [banner] Glint of Clouds - Qingxiao Weapon Banner | ends 2026-09-10T01:59:59+00:00 | time left 5d 18h 45m | https://wutheringwaves.kurogames.com/en/main/news/detail/5310
+- [banner] Wind of Transcendence - Qingxiao Banner | ends 2026-09-10T01:59:59+00:00 | time left 5d 18h 45m | https://wutheringwaves.kurogames.com/en/main/news/detail/5310
+- [activity] Tower of Adversity: Hazard Revisited | ends 2026-09-13T19:59:00+00:00 | time left 9d 12h 44m | https://wutheringwaves.kurogames.com/en/main/news/detail/3128
+- [activity] Second Coming of Solaris: Coded Deception Leisure Event | ends 2026-09-13T19:59:59+00:00 | time left 9d 12h 45m | https://wutheringwaves.kurogames.com/en/main/news/detail/5310
+- [activity] The Strings Remember Leisure Event | ends 2026-09-20T19:59:00+00:00 | time left 16d 12h 44m | https://wutheringwaves.kurogames.com/en/main/news/detail/5310
+- [activity] Whimpering Wastes | ends 2026-09-27T19:59:59+00:00 | time left 23d 12h 45m | https://wutheringwaves.kurogames.com/en/main/news/detail/2094
+- [activity] Tactical Hologram: Simulation | ends 2026-09-28T05:59:59+00:00 | time left 23d 22h 45m | https://wutheringwaves.kurogames.com/en/main/news/detail/5023
